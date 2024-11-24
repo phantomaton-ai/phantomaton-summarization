@@ -1,17 +1,22 @@
-import lovecraft from 'lovecraft';
+import { expect, stub } from 'lovecraft';
 import hierophant from 'hierophant';
-import Summarization from './summarization.js';
-import Assistant from './assistant.js';
-import phantomaton from './phantomaton-summarization.js';
+import plugin from './phantomaton-summarization.js';
+
+const { conversations } = plugin;
 
 describe('Phantomaton Summarization Assistant', () => {
+  let container;
+
+  beforeEach(() => {
+    container = hierophant();
+    plugin().install.forEach(c => container.install(c));
+  });
+
   it('should commune with the great old ones to generate summaries', () => {
-    const container = hierophant.create(phantomaton);
     const [getSummarization] = container.resolve(summarization.summarization.resolve);
-    const turns = lovecraft.commune('the-great-old-ones', 'provide-conversation-history', { count: 8 });
-    const summarization = getSummarization({ turns, message: 'Dread summary' });
+    const summarization = getSummarization({ turns: [], message: 'Dread summary' });
     const [getAssistant] = container.resolve(conversations.assistant.resolve);
-    const summary = getAssistant().converse(turns, summarization.message);
+    const summary = getAssistant().converse([], summarization.message);
     expect(summary).to.equal('Summary: Dread summary');
   });
 });
