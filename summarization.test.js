@@ -22,7 +22,7 @@ describe('Summarization', () => {
     expect(summary).to.equal('Summary: Dread summary');
   });
 
-  it('creates a conversation with the summarization context', () => {
+  it('creates a conversation with the summarization context', async () => {
     const summarization = new Summarization({ message: 'Dread summary', turns: 16 });
     const conversation = {
       turns: ['turn1', 'turn2', 'turn3', 'turn4'],
@@ -31,9 +31,9 @@ describe('Summarization', () => {
       },
       advance: async () => ({ message: 'turn5', reply: 'response5' })
     };
-    const conversationWithSummarization = summarization.conversation(conversation);
+    const summarized = summarization.conversation(conversation);
 
-    await conversationWithSummarization.advance();
+    await summarized.advance();
     expect(summarization.summary).to.equal('Summary: Dread summary');
   });
 });
