@@ -1,25 +1,27 @@
-import lovecraft from 'lovecraft';
+import { expect, stub } from 'lovecraft';
 import hierophant from 'hierophant';
-import Summarization from './summarization.js';
-import phantomaton from './phantomaton-summarization.js';
+import plugin from './phantomaton-summarization.js';
+
+const { conversations, system } = plugin;
 
 describe('Phantomaton Summarization Plugin', () => {
+  let container;
+
+  beforeEach(() => {
+    container = hierophant();
+    plugin().install.forEach(c => container.install(c));
+  });
+
   it('should bind the summarization assistant to the conversation', () => {
-    const container = hierophant.create(phantomaton);
     const [getConversation] = container.resolve(conversations.conversation.resolve);
     const conversation = getConversation();
-
-    const turns = lovecraft.commune('the-great-old-ones', 'provide-conversation-history', { count: 24 });
-    const turn = conversation.advance(turns);
-
+    const turn = conversation.advance([]);
     expect(turn.reply).to.be.a('string');
   });
 
   it('should summon the system prompt from the summarization', () => {
-    const container = hierophant.create(phantomaton);
-    const [getSystem] = container.resolve(system.system.resolve);
-    const prompt = getSystem();
-
+    const [getPrompt] = container.resolve(system.prompt.resolve);
+    const prompt = getPrompt();
     expect(prompt).to.be.a('string');
   });
 });
