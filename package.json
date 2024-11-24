@@ -20,5 +20,9 @@
   "type": "module",
   "devDependencies": {
     "lovecraft": "^1.0.3"
+  },
+  "dependencies": {
+    "phantomaton-conversations": "^1.0.1",
+    "phantomaton-plugins": "^0.0.2"
   }
 }
