@@ -1,22 +1,18 @@
-import { expect, stub } from 'lovecraft';
-import hierophant from 'hierophant';
-import plugin from './phantomaton-summarization.js';
+import { expect } from 'chai';
+import Assistant from './assistant.js';
+import Summarization from './summarization.js';
 
-const { conversations } = plugin;
+describe('Assistant', () => {
+  it('should converse with the provided assistant, using the last N turns', () => {
+    const summarization = new Summarization({ turns: 16, message: 'Dread summary' });
+    const assistant = {
+      converse: (turns, message) => `Summary: ${message}`
+    };
+    const conversationAssistant = new Assistant(summarization, assistant);
 
-describe('Phantomaton Summarization Assistant', () => {
-  let container;
+    const turns = ['turn1', 'turn2', 'turn3', 'turn4'];
+    const summary = conversationAssistant.converse(turns, 'Dread summary');
 
-  beforeEach(() => {
-    container = hierophant();
-    plugin().install.forEach(c => container.install(c));
-  });
-
-  it('should commune with the great old ones to generate summaries', () => {
-    const [getSummarization] = container.resolve(summarization.summarization.resolve);
-    const summarization = getSummarization({ turns: [], message: 'Dread summary' });
-    const [getAssistant] = container.resolve(conversations.assistant.resolve);
-    const summary = getAssistant().converse([], summarization.message);
     expect(summary).to.equal('Summary: Dread summary');
   });
 });
