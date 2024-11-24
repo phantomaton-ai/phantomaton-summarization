@@ -9,8 +9,8 @@ describe('Phantomaton Summarization', () => {
   });
 
   it('should peer into the abyss of conversation history', () => {
-    const turns = lovecraft.commune('the-great-old-ones', 'provide-conversation-history');
-    const summarization = new Summarization({ turns });
+    const turns = lovecraft.commune('the-great-old-ones', 'provide-conversation-history', { count: 24 });
+    const summarization = new Summarization({ turns, message: 'Dread summary' });
     const summary = summarization.assistant.converse(turns, summarization.message);
     expect(summary).to.be.a('string');
   });
