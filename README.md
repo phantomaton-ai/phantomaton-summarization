@@ -6,8 +6,6 @@ The Phantomaton Summarization module extends the Phantomaton conversational fram
 
 - **Automatic Summarization**: The Summarization module seamlessly integrates with the Phantomaton Conversations component, generating summaries of the conversation at configurable intervals.
 - **Customizable Summarization**: The content and format of the summaries can be customized through configuration options and extension points.
-- **Conversation State Preservation**: The generated summaries are stored as part of the conversation state, allowing the conversation to be resumed from any point without loss of context.
-- **Extensibility**: The Summarization module is designed to be easily extended and integrated with other Phantomaton components, enabling advanced use cases.
 
 ## Usage 🛠️
 
@@ -17,20 +15,21 @@ To use the Phantomaton Summarization module, you'll need to install it as a depe
 npm install phantomaton-summarization
 ```
 
-Once installed, you can configure and integrate the Summarization module with your Phantomaton application:
+Once installed, you can configure and integrate the Summarization module with your Phantomaton application's prompt:
 
-```javascript
-import summarization from 'phantomaton-summarization';
-import conversations from 'phantomaton-conversations';
+```markdown
+/install phantomaton-conversations
+/install phantomaton-summarization
 
-const container = summarization.create({
-  // Provide any necessary configuration options
-});
-
-// Integrate the Summarization module with Phantomaton Conversations
-const [getConversation] = container.resolve(conversations.conversation.resolve);
-const conversation = getConversation();
+You are a friendy chatbot with summarization capabilities.
 ```
+
+## Configuration 🤖
+
+This plugin accepts the following configuration options:
+
+* `turns`: The maximum number of turns to send to an assistant in their unsummarized form.
+* `message`: The message to send to the assistant when requesting summarization.
 
 ## Extensibility 🔌
 
