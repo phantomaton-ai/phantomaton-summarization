@@ -4,7 +4,7 @@ import Summarization from './summarization.js';
 
 describe('Conversation', () => {
   it('summarizes the conversation periodically', async () => {
-    const summarization = new Summarization({ turns: 16, message: 'Dread summary' });
+    const summarization = new Summarization({ turns: 2, message: 'Dread summary' });
     const conversation = {
       turns: ['turn1', 'turn2', 'turn3', 'turn4'],
       assistant: {
@@ -22,7 +22,7 @@ describe('Conversation', () => {
   });
 
   it('generates a summary when requested', async () => {
-    const summarization = new Summarization({ turns: 16, message: 'Dread summary' });
+    const summarization = new Summarization({ turns: 2, message: 'Dread summary' });
     const conversation = {
       turns: ['turn1', 'turn2', 'turn3', 'turn4'],
       assistant: {
