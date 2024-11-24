@@ -17,7 +17,7 @@ export default class Summarization {
 
   prompt() {
     return [
-      '# Summary of the conversation so far \n\n',
+      '# Summary of the conversation so far',
       this.summary
     ].join('\n\n');
   }

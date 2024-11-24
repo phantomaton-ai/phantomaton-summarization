@@ -5,15 +5,15 @@ import Conversation from './conversation.js';
 
 describe('Summarization', () => {
   it('generates a system prompt with the current summary', () => {
-    const summarization = new Summarization({ message: 'Dread summary', turns: 16 });
+    const summarization = new Summarization({ message: 'Dread summary', turns: 2 });
     summarization.set('New summary');
 
     const prompt = summarization.prompt();
-    expect(prompt).to.equal('# Summary of the conversation so far \n\nNew summary');
+    expect(prompt).to.equal('# Summary of the conversation so far\n\nNew summary');
   });
 
   it('creates an assistant with the summarization context', () => {
-    const summarization = new Summarization({ message: 'Dread summary', turns: 16 });
+    const summarization = new Summarization({ message: 'Dread summary', turns: 2 });
     const assistant = summarization.assistant({
       converse: (turns, message) => `Summary: ${message}`
     });
@@ -23,7 +23,7 @@ describe('Summarization', () => {
   });
 
   it('creates a conversation with the summarization context', async () => {
-    const summarization = new Summarization({ message: 'Dread summary', turns: 16 });
+    const summarization = new Summarization({ message: 'Dread summary', turns: 2 });
     const conversation = {
       turns: ['turn1', 'turn2', 'turn3', 'turn4'],
       assistant: {
