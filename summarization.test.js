@@ -1,42 +1,39 @@
-import { expect, stub } from 'lovecraft';
-import hierophant from 'hierophant';
-import plugin from './phantomaton-summarization.js';
+import { expect } from 'chai';
+import Summarization from './summarization.js';
+import Assistant from './assistant.js';
+import Conversation from './conversation.js';
 
-const { summarization } = plugin;
-
-describe('Phantomaton Summarization', () => {
-  let container;
-
-  beforeEach(() => {
-    container = hierophant();
-    plugin().install.forEach(c => container.install(c));
-  });
-
-  it('provides a system prompt from summarization', () => {
-    const [getPrompt] = container.resolve(system.prompt.resolve);
-    const prompt = getPrompt();
-    expect(prompt).to.be.a('string');
-  });
-
-  it('aggregates assistant providers for summarization', () => {
-    const assistant1 = stub().returns('Summary 1');
-    const assistant2 = stub().returns('Summary 2');
-
-    container.install(conversations.assistant.provider([], () => assistant1));
-    container.install(conversations.assistant.provider([], () => assistant2));
-
-    const [getAssistant] = container.resolve(conversations.assistant.resolve);
-    const summary = getAssistant().converse([], 'Dread summary');
-
-    expect(assistant1.called).to.be.true;
-    expect(assistant2.called).to.be.true;
-    expect(summary).to.equal('Summary 1\nSummary 2');
-  });
-
-  it('preserves the sanctity of the summarization', () => {
-    const [getSummarization] = container.resolve(summarization.summarization.resolve);
-    const summarization = getSummarization({ message: 'Dread summary', turns: 16 });
+describe('Summarization', () => {
+  it('should generate a system prompt with the current summary', () => {
+    const summarization = new Summarization({ message: 'Dread summary', turns: 16 });
     summarization.set('New summary');
-    expect(summarization.summary).to.equal('New summary');
+
+    const prompt = summarization.prompt();
+    expect(prompt).to.equal('# Summary of the conversation so far \n\nNew summary');
+  });
+
+  it('should create an assistant with the summarization context', () => {
+    const summarization = new Summarization({ message: 'Dread summary', turns: 16 });
+    const assistant = summarization.assistant({
+      converse: (turns, message) => `Summary: ${message}`
+    });
+
+    const summary = assistant.converse(['turn1', 'turn2'], 'Dread summary');
+    expect(summary).to.equal('Summary: Dread summary');
+  });
+
+  it('should create a conversation with the summarization context', () => {
+    const summarization = new Summarization({ message: 'Dread summary', turns: 16 });
+    const conversation = {
+      turns: ['turn1', 'turn2', 'turn3', 'turn4'],
+      assistant: {
+        converse: (turns, message) => `Summary: ${message}`
+      },
+      advance: async () => ({ message: 'turn5', reply: 'response5' })
+    };
+    const conversationWithSummarization = summarization.conversation(conversation);
+
+    await conversationWithSummarization.advance();
+    expect(summarization.summary).to.equal('Summary: Dread summary');
   });
 });
