@@ -2,7 +2,7 @@ import Assistant from './assistant.js';
 import Conversation from './conversation.js';
 import defaults from './defaults.js';
 
-class Summarization {
+export default class Summarization {
   constructor(options) {
     const { message, turns } = { ...defaults, ...options };
     this.message = message;
@@ -30,5 +30,3 @@ class Summarization {
     return new Conversation(this, conversation);
   }
 }
-
-export default Summarization;

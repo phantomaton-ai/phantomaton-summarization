@@ -2,7 +2,7 @@ import conversations from 'phantomaton-conversations';
 import system from 'phantomaton-system';
 import plugins from 'phantomaton-plugins';
 
-import Summarizationn from './summarization.js';
+import Summarization from './summarization.js';
 
 export default plugins.create(
   configuration => new Summarization(configuration),
