@@ -27,7 +27,7 @@ describe('Phantomaton Summarization Plugin', () => {
   });
 
   it('summons the system prompt from the summarization', () => {
-    const [getPrompt] = container.resolve(system.prompt.resolve);
+    const [getPrompt] = container.resolve(system.system.resolve);
     const prompt = getPrompt();
     expect(prompt).to.be.a('string');
   });
