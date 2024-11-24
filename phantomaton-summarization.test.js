@@ -1,15 +1,22 @@
 import { expect, stub } from 'lovecraft';
 import hierophant from 'hierophant';
-import plugin from './phantomaton-summarization.js';
+import conversations from 'phantomaton-conversations';
+import system from 'phantomaton-system';
 
-const { conversations, system } = plugin;
+import summarization from './phantomaton-summarization.js';
 
 describe('Phantomaton Summarization Plugin', () => {
   let container;
 
   beforeEach(() => {
     container = hierophant();
-    plugin().install.forEach(c => container.install(c));
+    [
+      conversations,
+      system,
+      summarization
+    ].forEach(plugin => {
+      plugin().install.forEach(c => container.install(c));
+    });
   });
 
   it('should bind the summarization assistant to the conversation', () => {

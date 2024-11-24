@@ -11,10 +11,12 @@ export default plugins.create(
       () => instance.prompt()
     ),
     conversations.assistant.decorator(
-      assistant => instance.assistant(assistant)
+      [],
+      () => assistant => instance.assistant(assistant)
     ),
     conversations.conversation.decorator(
-      conversation => instance.conversation(conversation)
+      [],
+      () => conversation => instance.conversation(conversation)
     )
   ]
 );
