@@ -12,7 +12,7 @@ export default plugins.create(
     ),
     conversations.assistant.decorator(
       assistant => instance.assistant(assistant)
-    )
+    ),
     conversations.conversation.decorator(
       conversation => instance.conversation(conversation)
     )
