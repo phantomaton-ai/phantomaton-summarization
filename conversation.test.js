@@ -1,38 +1,38 @@
-import { expect, stub } from 'lovecraft';
-import hierophant from 'hierophant';
-import plugin from './phantomaton-summarization.js';
+import { expect } from 'chai';
+import Conversation from './conversation.js';
+import Summarization from './summarization.js';
 
-const { conversations } = plugin;
+describe('Conversation', () => {
+  it('should summarize the conversation periodically', async () => {
+    const summarization = new Summarization({ turns: 16, message: 'Dread summary' });
+    const conversation = {
+      turns: ['turn1', 'turn2', 'turn3', 'turn4'],
+      assistant: {
+        converse: (turns, message) => `Summary: ${message}`
+      },
+      advance: async () => ({ message: 'turn5', reply: 'response5' })
+    };
+    const conversationWithSummarization = new Conversation(summarization, conversation);
 
-describe('Phantomaton Conversation Summarization', () => {
-  let container;
+    await conversationWithSummarization.advance();
+    await conversationWithSummarization.advance();
+    await conversationWithSummarization.advance();
 
-  beforeEach(() => {
-    container = hierophant();
-    plugin().install.forEach(c => container.install(c));
+    expect(summarization.summary).to.equal('Summary: Dread summary');
   });
 
-  it('should summon the specter of periodic summarization', async () => {
-    const [getConversation] = container.resolve(conversations.conversation.resolve);
-    const conversation = getConversation({ turns: [] });
+  it('should generate a summary when requested', async () => {
+    const summarization = new Summarization({ turns: 16, message: 'Dread summary' });
+    const conversation = {
+      turns: ['turn1', 'turn2', 'turn3', 'turn4'],
+      assistant: {
+        converse: (turns, message) => `Summary: ${message}`
+      }
+    };
+    const conversationWithSummarization = new Conversation(summarization, conversation);
 
-    await conversation.advance();
-    await conversation.advance();
-    await conversation.advance();
+    await conversationWithSummarization.summarize();
 
-    const [getSummarization] = container.resolve(summarization.summarization.resolve);
-    const summarization = getSummarization({ turns: [], message: 'Dread summary' });
-    expect(summarization.summary).to.be.a('string');
-  });
-
-  it('should commune with the assistant to generate summaries', async () => {
-    const [getConversation] = container.resolve(conversations.conversation.resolve);
-    const conversation = getConversation({ turns: [] });
-
-    await conversation.summarize();
-
-    const [getSummarization] = container.resolve(summarization.summarization.resolve);
-    const summarization = getSummarization({ turns: [], message: 'Dread summary' });
-    expect(summarization.summary).to.be.a('string');
+    expect(summarization.summary).to.equal('Summary: Dread summary');
   });
 });
