@@ -7,9 +7,7 @@ import Summarization from './summarization.js';
 export default plugins.create(
   configuration => new Summarization(configuration),
   ({ instance }) => [
-    plugins.define(system.system).as(
-      () => instance.prompt()
-    ),
+    plugins.define(system.system).as(() => instance.prompt()),
     conversations.assistant.decorator(
       [],
       () => assistant => instance.assistant(assistant)

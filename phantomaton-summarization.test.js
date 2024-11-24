@@ -10,11 +10,7 @@ describe('Phantomaton Summarization Plugin', () => {
 
   beforeEach(() => {
     container = hierophant();
-    [
-      conversations,
-      system,
-      summarization
-    ].forEach(plugin => {
+    [conversations, system, summarization].forEach(plugin => {
       plugin().install.forEach(c => container.install(c));
     });
   });
