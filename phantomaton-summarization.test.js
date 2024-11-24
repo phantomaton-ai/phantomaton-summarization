@@ -19,14 +19,14 @@ describe('Phantomaton Summarization Plugin', () => {
     });
   });
 
-  it('should bind the summarization assistant to the conversation', () => {
+  it('binds the summarization assistant to the conversation', () => {
     const [getConversation] = container.resolve(conversations.conversation.resolve);
     const conversation = getConversation();
     const turn = conversation.advance([]);
     expect(turn.reply).to.be.a('string');
   });
 
-  it('should summon the system prompt from the summarization', () => {
+  it('summons the system prompt from the summarization', () => {
     const [getPrompt] = container.resolve(system.prompt.resolve);
     const prompt = getPrompt();
     expect(prompt).to.be.a('string');
