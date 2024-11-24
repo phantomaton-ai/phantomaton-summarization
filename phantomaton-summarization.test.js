@@ -9,8 +9,8 @@ describe('Phantomaton Summarization Plugin', () => {
     const [getConversation] = container.resolve(conversations.conversation.resolve);
     const conversation = getConversation();
 
-    lovecraft.invoke('commune', 'the-great-old-ones', 'provide-conversation-history', { count: 24 });
-    const turn = conversation.advance();
+    const turns = lovecraft.commune('the-great-old-ones', 'provide-conversation-history', { count: 24 });
+    const turn = conversation.advance(turns);
 
     expect(turn.reply).to.be.a('string');
   });
