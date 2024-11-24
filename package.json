@@ -1,6 +1,6 @@
 {
   "name": "phantomaton-summarization",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "phantomaton-summarization.js",
   "scripts": {
     "all": "lovecraft -a",
