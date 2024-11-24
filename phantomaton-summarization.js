@@ -14,7 +14,7 @@ export default plugins.create(
     ),
     conversations.conversation.decorator(
       [],
-      () => conversation => instance.conversation(conversation)
+      () => conversation => turns => instance.conversation(conversation(turns))
     )
   ]
 );
