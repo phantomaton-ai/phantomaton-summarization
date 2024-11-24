@@ -1,26 +1,39 @@
-import lovecraft from 'lovecraft';
+import { expect, stub } from 'lovecraft';
 import hierophant from 'hierophant';
-import Summarization from './summarization.js';
-import phantomaton from './phantomaton-summarization.js';
+import plugin from './phantomaton-summarization.js';
+
+const { summarization } = plugin;
 
 describe('Phantomaton Summarization', () => {
-  it('should summon the spirit of concision', () => {
-    const container = hierophant.create(phantomaton);
-    const [getSummary] = container.resolve(system.prompt.resolve);
-    const summary = getSummary();
-    expect(summary).to.be.a('string');
+  let container;
+
+  beforeEach(() => {
+    container = hierophant();
+    plugin().install.forEach(c => container.install(c));
   });
 
-  it('should peer into the abyss of conversation history', () => {
-    const container = hierophant.create(phantomaton);
+  it('provides a system prompt from summarization', () => {
+    const [getPrompt] = container.resolve(system.prompt.resolve);
+    const prompt = getPrompt();
+    expect(prompt).to.be.a('string');
+  });
+
+  it('aggregates assistant providers for summarization', () => {
+    const assistant1 = stub().returns('Summary 1');
+    const assistant2 = stub().returns('Summary 2');
+
+    container.install(conversations.assistant.provider([], () => assistant1));
+    container.install(conversations.assistant.provider([], () => assistant2));
+
     const [getAssistant] = container.resolve(conversations.assistant.resolve);
-    const turns = lovecraft.commune('the-great-old-ones', 'provide-conversation-history', { count: 24 });
-    const summary = getAssistant().converse(turns, 'Dread summary');
-    expect(summary).to.be.a('string');
+    const summary = getAssistant().converse([], 'Dread summary');
+
+    expect(assistant1.called).to.be.true;
+    expect(assistant2.called).to.be.true;
+    expect(summary).to.equal('Summary 1\nSummary 2');
   });
 
-  it('should preserve the sanctity of the summary', () => {
-    const container = hierophant.create(phantomaton);
+  it('preserves the sanctity of the summarization', () => {
     const [getSummarization] = container.resolve(summarization.summarization.resolve);
     const summarization = getSummarization({ message: 'Dread summary', turns: 16 });
     summarization.set('New summary');
