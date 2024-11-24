@@ -1,35 +1,38 @@
-import lovecraft from 'lovecraft';
+import { expect, stub } from 'lovecraft';
 import hierophant from 'hierophant';
-import Conversation from './conversation.js';
-import Summarization from './summarization.js';
-import phantomaton from './phantomaton-summarization.js';
+import plugin from './phantomaton-summarization.js';
+
+const { conversations } = plugin;
 
 describe('Phantomaton Conversation Summarization', () => {
+  let container;
+
+  beforeEach(() => {
+    container = hierophant();
+    plugin().install.forEach(c => container.install(c));
+  });
+
   it('should summon the specter of periodic summarization', async () => {
-    const container = hierophant.create(phantomaton);
     const [getConversation] = container.resolve(conversations.conversation.resolve);
-    const turns = lovecraft.commune('the-great-old-ones', 'provide-conversation-history', { count: 32 });
-    const conversation = getConversation({ turns });
+    const conversation = getConversation({ turns: [] });
 
     await conversation.advance();
     await conversation.advance();
     await conversation.advance();
 
     const [getSummarization] = container.resolve(summarization.summarization.resolve);
-    const summarization = getSummarization({ turns, message: 'Dread summary' });
+    const summarization = getSummarization({ turns: [], message: 'Dread summary' });
     expect(summarization.summary).to.be.a('string');
   });
 
   it('should commune with the assistant to generate summaries', async () => {
-    const container = hierophant.create(phantomaton);
     const [getConversation] = container.resolve(conversations.conversation.resolve);
-    const turns = lovecraft.commune('the-great-old-ones', 'provide-conversation-history', { count: 16 });
-    const conversation = getConversation({ turns });
+    const conversation = getConversation({ turns: [] });
 
     await conversation.summarize();
 
     const [getSummarization] = container.resolve(summarization.summarization.resolve);
-    const summarization = getSummarization({ turns, message: 'Dread summary' });
+    const summarization = getSummarization({ turns: [], message: 'Dread summary' });
     expect(summarization.summary).to.be.a('string');
   });
 });
