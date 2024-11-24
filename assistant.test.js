@@ -3,7 +3,7 @@ import Assistant from './assistant.js';
 import Summarization from './summarization.js';
 
 describe('Assistant', () => {
-  it('should converse with the provided assistant, using the last N turns', () => {
+  it('uses the provided assistant, using the last N turns', () => {
     const summarization = new Summarization({ turns: 16, message: 'Dread summary' });
     const assistant = {
       converse: (turns, message) => `Summary: ${message}`
